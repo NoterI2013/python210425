@@ -95,10 +95,109 @@ res = r.recv()
 print(res)
 
 r.interactive()
-
 ```
 
 flag
 ```
 CTF{Hel10WorLD123}
+```
+
+## 3rd - 50 pts
+可以幫我找出第三大的數字嗎?
+```
+nc 120.114.62.214 2400
+```
+solution by bubble sort
+```
+from pwn import *
+
+ip = "120.114.62.214"
+port = 2400
+
+r = remote(ip, port)
+
+r.recvuntil("Now You Turn")
+r.recvuntil(" : ")
+res = r.recvline()[:-1]  #recvline includes '\n'. Thus, by using [:-1] than '\n' will be excluded
+#print(res)
+
+#res="2 654 5 656 544"
+numbers = list(map(int, res.split()))
+print (numbers)
+length = len(numbers)
+sort = [int(numbers[0]), int(numbers[1]), int(numbers[2]), int(numbers[3])]
+#sort = [0, 1, 2, 3]
+for i in range(3, length):
+	if sort[3] > int(numbers[i]):
+		continue
+	sort[3] = int(numbers[i])
+	for x in range(0, 4):
+		for y in range(0, 4-x-1):
+			if sort[y] < sort[y+1]:
+				sort[y], sort[y+1] = sort[y+1], sort[y]
+				#print("sort[%d] is %d and sort[%d] is %d" % (y, sort[y], y+1, sort[y+1]))
+#By bubble sort, the sequence has been sort form the biggest to the smallest
+print(sort[2])
+
+r.interactive()
+```
+flag
+```
+CTF{yoUaReInth33RdpL4c3}
+```
+solution by res.sort()
+```
+from pwn import *
+
+ip = "120.114.62.214"
+port = 2400
+
+r = remote(ip, port)
+
+r.recvuntil("Now You Turn")
+r.recvuntil(" : ")
+res = r.recvline()[:-1] # The input includes '\n', thus we use [:-1] to exclude the last char, i.e. '\n'
+
+#get data
+res = list(map(int, res.split()))
+
+res.sort() # sort sequence from smallest to biggest
+
+#return value to server
+r.recvuntil("answer :")
+r.sendline(str(res[-3]))
+
+#print(res[-3])
+
+r.interactive()
+```
+flag (same as the former solution)
+```
+CTF{yoUaReInth33RdpL4c3}
+```
+
+## count - 50 pts
+你會數⼀到一百嗎?
+```
+nc 120.114.62.214 2403
+```
+solution
+```
+from pwn import*
+
+ip= "120.114.62.214"
+port = 2403
+
+r = remote(ip, port)
+
+for i in range(1, 101):
+	r.recvuntil("wave")
+	r.recvuntil("?")
+	r.sendline(str(i))
+
+r.interactive()
+```
+flag
+```
+CTF{gOOD4tMatHYOUarE}
 ```
