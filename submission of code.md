@@ -58,3 +58,47 @@ BreakALLCTF{53usZQ3hWW25dchZ7dXe}
 ```
 66 114 101 97 107 65 76 76 67 84 70 123 65 109 118 48 117 68 121 101 114 118 80 116 109 86 114 57 83 83 83 75 125
 ```
+
+solution
+```
+import base64
+print(base64.b32decode("IJZGKYLLIFGEYQ2UIZ5TS6BUHA2VMUZXO5UWS5CCLJMFKVLIJVSX2==="))
+```
+
+output
+```
+b'BreakALLCTF{9x485VS7wiitBZXUUhMe}'
+```
+
+其中
+```
+BreakALLCTF{9x485VS7wiitBZXUUhMe}
+```
+即為解
+
+# PPC_Ez
+## hello world - 50 pts
+你連的到伺服器嗎?
+```
+nc 120.114.62.214 2405
+```
+solution
+```
+from pwn import *
+
+ip = "120.114.62.214"
+port = 2405
+
+r = remote(ip, port)
+
+res = r.recv()
+print(res)
+
+r.interactive()
+
+```
+
+flag
+```
+CTF{Hel10WorLD123}
+```
